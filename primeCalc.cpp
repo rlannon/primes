@@ -150,8 +150,8 @@ bool calcMethod(int dividend, int& count, int &factor){
 	int sq = sqrt(dividend)+1;			//	set sq to be equal to the divident (rounded) + 1
 	for (int divisor=2; divisor <= sq; divisor++){	//	begin the divisor at two, and loop until it reaches sq
 		if (dividend%divisor == 0){
-			factor = divisor;		
-			return false;			//	return false; number is not prime			
+			factor = divisor;
+			return false;			//	return false; number is not prime
 			break;
 		} else if (dividend%divisor != 0 && divisor >= sq){
 			count++;
