@@ -1,0 +1,7 @@
+# .gitignore for prime_project #
+################################
+
+*.log
+*.o
+*.out
+primes
