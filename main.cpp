@@ -46,7 +46,7 @@ int main(){
 			case 3:
 				cout << "Number to test: ";
 				cin >> dec;
-				if (primeCalc::calcMethod(dec, y, factor)) cout << "\n" << dec << " is prime\n" << endl;
+				if (calcMethod(dec, y, factor)) cout << "\n" << dec << " is prime\n" << endl;
 				else cout << "\n" << dec << " is not prime -- " << factor << " is a factor\n" << endl;
 				break;
 			case 4:
@@ -142,6 +142,6 @@ void vars(){
 			log_p_num = false;
 			break;
 	}
-	primeCalc::primeCalc(dividend, min, max, vars_q, log, log_p_num);
+	primeCalc(dividend, min, max, vars_q, log, log_p_num);
 	return;
 }
