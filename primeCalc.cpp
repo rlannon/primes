@@ -1,133 +1,6 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
-#include <iostream>
-#include <fstream>
-#include <math.h>
+/* primeCalc.cpp -- our file for defining the methods in primeCalc.h */
 
-//the goal of this program is to calculate prime numbers
-
-void primeCalc(int dividend, int min, int max, bool print, bool log, bool log_p_num);
-void vars();
-
-using namespace std;
-
-int main(){
-	cout << "Primes" << endl << "A rudimentary prime calculator!" << endl;
-	int dec = 0;
-	bool q = false;
-	while (q == false) {
-		cout << "What do you want to do?" << endl;
-		cout << "[1] Use Incremental Calculation" << endl << "[2] Use a Sieve" << endl << "[3] Test whether a number is prime" << endl << "[4] Quit" << endl;
-		cin >> dec;
-		switch(dec){
-			case 1:
-				vars();
-				break;
-			case 2:
-				cout << "Not yet supported." << endl;
-				break;
-			case 3:
-				cout << "Not yet supported." << endl;
-				break;
-			case 4:
-				q=true;
-				break;
-			default:
-				cout << "Invalid!" << endl;
-				break;
-		}
-	}
-	cout << endl << endl;
-	return 0;
-}
-
-void vars(){
-
-	// Declare and initialize all of our variables
-
-	int i=3;
-	int max=0;
-	int min=0;
-	bool vars_q = false; // stay in loop when false
-	bool log = false; //whether to log to file
-	bool log_p_num = false;
-	int c;
-
-	while (vars_q == false) {
-		cout << "Lower limit? ";
-		cin >> min;
-		cout << "Upper limit? ";
-		cin >> max;
-
-		if (min<2){
-			i=3;
-			min = 2;
-			cout << "min set to an integer value lower than 2" << endl << "calculating from min = 2" << endl;
-			vars_q = true; // set to true to continue
-		}
-		if (min == max){
-			min = 2;
-			i = 3;
-			cout << "min cannot equal max" << endl;
-			vars_q = false;
-		} else if (min > max){
-			i=3;
-			min = 2;
-			cout << "min must be smaller than max" << endl;
-			vars_q = false;
-		} else if (min < max && min >= 2){
-			i=min;
-			vars_q = true;
-		} else {
-			cout << "unexpected error!" << endl;
-			return;
-		}
-	}
-
-	cout << "Print numbers in stream to screen?" << endl;
-	cout << "[1] Yes" << endl << "[2] No" << endl;
-
-	cin >> c;
-	switch(c){
-		case 1:
-			vars_q = true;
-			break;
-		case 2:
-			vars_q = false;
-			break;
-		default:
-			cout << "Invalid; will not print" << endl;
-			vars_q = false;
-	}
-
-	cout << "Output to log file?" << endl << "[1] Yes" << endl << "[2] Data only, no numbers" << endl << "[3] No" << endl;
-
-	cin >> c;
-	switch(c){
-		case 1:		// data and numbers
-			log = true;
-			log_p_num = true;
-			break;
-		case 2:		// data only, no numbers
-			log = true;
-			log_p_num = false;
-			break;
-		case 3:		// no output
-			log = false;
-			log_p_num = false;
-			break;
-		default:
-			cout << "Invalid; will not log results" << endl;
-			log = false;
-			log_p_num = false;
-			break;
-	}
-	primeCalc(i, min, max, vars_q, log, log_p_num);
-	return;
-}
+#include "primeCalc.h"
 
 void primeCalc(int dividend, int min, int max, bool print, bool log, bool log_p_num) {
 
@@ -139,6 +12,8 @@ void primeCalc(int dividend, int min, int max, bool print, bool log, bool log_p_
 */
 
 	int count = 0;	// initialize a variable to keep track of the number of primes we have calculated
+	int factor=0;	// dummy variable for the calcMethod(int dividend, int& count, int& factor) function.
+			// might eliminate the dummy variable 'int factor' by making a copy of 'bool calcMethod' with no factor option
 
 	/* For debugging purposes:
 
@@ -153,7 +28,7 @@ void primeCalc(int dividend, int min, int max, bool print, bool log, bool log_p_
 	end debug variable section */
 
 	ofstream logfile;
-	logfile.open("new_prime.log");
+	logfile.open("primes.log");
 
 	clock_t t;	// initialize our clock
 	time_t rawtime;
@@ -161,6 +36,16 @@ void primeCalc(int dividend, int min, int max, bool print, bool log, bool log_p_
 	time (&rawtime);
 	timeinfo = localtime (&rawtime);
 
+	//check to see if our file opened successfully; if not, set log and log_p_num to false
+	if(logfile.is_open()){
+		cout << "File opened successfully" << endl;
+	} else {
+		cout << "Error opening file" << endl;
+		log = false;
+		log_p_num = false;
+	}
+
+	//If we are writing to the logfile, write in some header data
 	if (log==true){
 		logfile << "Program runtime: ";
 		logfile << asctime(timeinfo) << endl;
@@ -221,22 +106,10 @@ for every iteration of the count loop:
 	t = clock(); //start the clock
 
 	for (int dividend = min; dividend < max;) {		//	set our dividend to min, and loop until it reaches the max
-		int sq = sqrt(dividend)+1;			//	set sq to be equal to the divident (rounded) + 1
-
-		for (int divisor=2; divisor <= sq; divisor++){	//	begin the divisor at two, and loop until it reaches sq
-			if (dividend%divisor == 0){
-				break;
-			} else if (dividend%divisor != 0 && divisor >= sq){
-				if (print){			//	if the user decides to print numbers to screen, print them in a list
-					cout << dividend << ", ";
-				}
-				if (log_p_num && log){		//	similarly, if the user wants to output numbers to log, print them in a list
-					logfile << dividend <<", ";
-				}
-				count++;			//	and increment the count
-			}
+		if (calcMethod(dividend, count, factor)){	//	call our calcMethod function to test whether a given number is prime
+			if (print) cout << dividend << ", ";
+			if (log && log_p_num) logfile << dividend << ", ";
 		}
-
 		dividend++;	// increment the dividend
 	}
 
@@ -260,4 +133,18 @@ for every iteration of the count loop:
 	logfile.close();
 
 	return;
+}
+
+bool calcMethod(int dividend, int& count, int &factor){
+	int sq = sqrt(dividend)+1;			//	set sq to be equal to the divident (rounded) + 1
+	for (int divisor=2; divisor <= sq; divisor++){	//	begin the divisor at two, and loop until it reaches sq
+		if (dividend%divisor == 0){
+			factor = divisor;		
+			return false;			//	return false; number is not prime			
+			break;
+		} else if (dividend%divisor != 0 && divisor >= sq){
+			count++;
+			return true;			//	return true; number is prime
+		}
+	}
 }
