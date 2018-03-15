@@ -1,6 +1,17 @@
 /* primeCalc.cpp -- our file for defining the methods in primeCalc.h */
 
+// Standard includes
+#include <stdbool.h>
+#include <math.h>
+#include <stdio.h>
+#include <iostream>
+#include <time.h>
+#include <fstream>
+
+// Our includes
 #include "primeCalc.h"
+
+using namespace std;
 
 void primeCalc(int dividend, int min, int max, bool print, bool log, bool log_p_num) {
 
