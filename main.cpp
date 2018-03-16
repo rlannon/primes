@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <string>
 
 // Our includes
 
@@ -27,37 +28,42 @@ using namespace std;
 
 // our code
 int main(){
-	cout << "Primes" << endl << "A rudimentary prime calculator!" << endl;
-	int dec = 0;
-	int y=0;
-	int factor=0;
-	bool q = false;
-	while (q == false) {
-		cout << "What do you want to do?" << endl;
-		cout << "[1] Use Incremental Calculation" << endl << "[2] Use a Sieve" << endl << "[3] Test whether a number is prime" << endl << "[4] Quit" << endl;
-		cin >> dec;
-		switch(dec){
-			case 1:
-				vars();
-				break;
-			case 2:
-				cout << "Not yet supported." << endl;
-				break;
-			case 3:
-				cout << "Number to test: ";
-				cin >> dec;
-				if (calcMethod(dec, y, factor)) cout << "\n" << dec << " is prime\n" << endl;
-				else cout << "\n" << dec << " is not prime -- " << factor << " is a factor\n" << endl;
-				break;
-			case 4:
-				q=true;
-				break;
-			default:
-				cout << "Invalid!" << endl;
-				break;
+	cout << "primes" << endl << "A rudimentary prime calculator" << endl;
+	cout << "For help, type 'help'" << endl << endl;
+	//our variables for int main()
+	string input;			// what the user enters; to be parsed
+	int dividend;			// for our "check" command
+	int count_dummy;		// dummy variable for the calcMethod function
+	int factor=0;			// the factor we wish to calculate
+	bool q = false;			// have we quit yet?
+	while (q == false) {		// main program loop
+		getline(cin, input);
+		if (input == "help"){
+			cout << "To calculate primes, type:\n\tcalc" << endl;
+			cout << "To check if a number is prime, type:\n\tcheck" << endl;
+			cout << "To quit, type:\n\tquit" << endl;
 		}
+		if (input == "calc"){
+			vars();
+		}
+		if (input == "check"){
+			cout << "Enter the number you wish to check: ";
+			cin >> dividend;
+			if(calcMethod(dividend, count_dummy, factor)){
+				cout << dividend << " is prime." << endl;
+			} else {
+				cout << dividend << " is not prime. " << factor << " is a factor." << endl;
+			}
+		}
+		if (input == "sieve"){
+			cout << "This function is not yet supported." << endl;
+		}
+		if (input == "quit"){
+			q = true;
+		}
+		cout << endl;
 	}
-	cout << endl << endl;
+	cout << endl;
 	return 0;
 }
 

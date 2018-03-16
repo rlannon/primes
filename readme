@@ -1,3 +1,11 @@
-README!
+readme: primes
 
-this is the project readme
+The feature currently being tested is to allow users to enter commands,
+rather than requiring them to select an option from a menu.
+
+Current supported commands:
+
+calc
+test
+help
+quit

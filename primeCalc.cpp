@@ -128,11 +128,8 @@ for every iteration of the count loop:
 
 	float t_s = (float)t/CLOCKS_PER_SEC;
 
-	printf("\nThere are %d",count);
-	printf(" prime numbers between %d",min);
-	printf(" and %d\n\n",max);
-	cout << "It took " << t_s << " seconds to calculate";
-	cout << " (" << t << ") ticks" << endl;
+	cout << "There are " << count << " prime number between " << min << "  and " << max << endl << endl;
+	cout << "It took " << t_s << " seconds to calculate (" << t << ") ticks" << endl;
 
 	if(log){
 		logfile << endl << "Number primes: " << count << endl;
